@@ -8,7 +8,7 @@ Access the DOM of a webpage as HTML with phantomjs.
 **rdom** depends on [phantomjs](http://phantomjs.org/), so make sure that is installed and visible to your PATH:
 
 ```r
-Sys.which("phantomjs")
+stopifnot(Sys.which("phantomjs") != "")
 ```
 
 **rdom** currently isn't on CRAN, but you can install it with devtools
