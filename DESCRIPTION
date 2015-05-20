@@ -1,0 +1,13 @@
+Package: rdom
+Title: Access the DOM of a webpage as HTML using phantomjs.
+Version: 0.0.1
+Authors@R: c(
+  person("Carson", "Sievert", role = c("aut", "cre"), email = "cpsievert1@gmail.com"),
+  person("Winston", "Chang", role = "cph", email = "winston@rstudio.com"))
+Description: Access the DOM of a webpage as HTML using phantomjs.
+Imports: XML
+Suggests: rvest
+Enhances: XML, rvest
+License: MIT
+SystemRequirements: phantomjs - http://phantomjs.org/
+LazyData: true
