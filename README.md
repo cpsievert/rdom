@@ -38,7 +38,7 @@ rdom("http://www.techstars.com/companies/stats/") %>%
 ```
 
 
-Note that the usual **rvest** approach can't find this table since the page is dynamic (the table is populated via JavaScript).
+Note that, by itself, **rvest** can't obtain this table since it isn't hard coded in the page source (the table is populated via JavaScript).
 
 ```r
 library("rvest")
@@ -68,13 +68,24 @@ Now, in another R session, pass the shiny URL to `rdom()` and it will return the
 
 ```r
 library("rvest")
-rdom("http://127.0.0.1:4870") %>% html_node("h2")
+(header <- rdom("http://127.0.0.1:4870") %>% html_node("h2") %>% html_text())
 ```
 
 ```r
-<h2>Hello Shiny!</h2>
+Hello Shiny!
+```
+
+This way it's fun and easy to test your shiny apps!
+
+```r
+library("testthat")
+expect_identical(header, "Hello Shiny!")
 ```
 
 ### TODO
 
 * An API for manipulating the DOM and injecting JS?
+
+### Acknowledgements
+
+Thanks to Winston Chang for [webshot](https://github.com/wch/webshot) which inspired the design of this package.
