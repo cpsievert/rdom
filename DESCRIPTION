@@ -8,6 +8,6 @@ Description: Access the DOM of a webpage as HTML using phantomjs.
 Imports: XML
 Suggests: rvest
 Enhances: XML, rvest
-License: MIT
+License: GPL-2
 SystemRequirements: phantomjs - http://phantomjs.org/
 LazyData: true
