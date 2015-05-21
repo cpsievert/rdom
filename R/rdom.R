@@ -5,12 +5,12 @@
 #' @examples
 #'
 #' library("rvest")
+#' # doesn't work
 #' html("http://www.techstars.com/companies/stats/") %>%
 #'   html_node(".table75") %>% html_table()
-#' t <- rdom("http://www.techstars.com/companies/stats/")
-#' t %>% html_node(".table75") %>% html_table()
-#' rdom("http://www.techstars.com/companies/stats/") %>% html_node(".table75") %>% html_table()
-#' rdom("http://www.google.org/")
+#' # should work
+#' rdom("http://www.techstars.com/companies/stats/") %>%
+#'   html_node(".table75") %>% html_table()
 #'
 
 rdom <- function(url) {
@@ -23,6 +23,9 @@ rdom <- function(url) {
   res <- system2(phantom_bin, args = as.character(args),
                  stdout = TRUE, stderr = TRUE, wait = TRUE)
   st <- attr(res, "status")
-  if (!is.null(st)) stop("phantomjs returned failure value: ", st)
+  if (!is.null(st)) {
+    message("Uh oh, something went wrong :", paste(res, "\n"))
+    stop("phantomjs returned failure value: ", st)
+  }
   XML::htmlParse(res, asText = TRUE)
 }

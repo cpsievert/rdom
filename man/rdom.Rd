@@ -14,11 +14,11 @@ Return DOM of a website as HTML
 }
 \examples{
 library("rvest")
+# doesn't work
 html("http://www.techstars.com/companies/stats/") \%>\%
   html_node(".table75") \%>\% html_table()
+# should work
 rdom("http://www.techstars.com/companies/stats/") \%>\%
   html_node(".table75") \%>\% html_table()
-
-rdom("http://www.google.org/")
 }
 
