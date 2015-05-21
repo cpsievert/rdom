@@ -25,7 +25,8 @@ rdom <- function(url) {
   st <- attr(res, "status")
   if (!is.null(st)) {
     message("Uh oh, something went wrong :", paste(res, "\n"))
-    stop("phantomjs returned failure value: ", st)
+    stop("system2 returned status code of: ", st)
   }
+  if (res == "phantomjs couldn't open the page.") stop(res)
   XML::htmlParse(res, asText = TRUE)
 }
