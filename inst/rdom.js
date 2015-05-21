@@ -6,9 +6,9 @@ var url = args[1];
 page.open(url, function (status) {
   // TODO: include options to manipulate DOM and/or inject JS?
   // http://phantomjs.org/page-automation.html
-    var js = page.evaluate(function () {
-        return document;
+    var doc = page.evaluate(function () {
+        return document.documentElement.outerHTML;
     });
-    console.log(js.all[0].outerHTML);
+    console.log(doc);
     phantom.exit();
 });

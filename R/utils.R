@@ -1,8 +1,8 @@
 # Much of this file is copied/adapted from Winston Chang's work
 
 phantom_run <- function(args, wait = TRUE) {
-  phantom_bin <- find_phantom()
-  system2(phantom_bin, args = as.character(args), stdout = TRUE, wait = wait)
+
+
 }
 
 # Try really hard to find bower in Windows
@@ -15,7 +15,7 @@ find_phantom <- function() {
   if (pjs == "")
     stop("phantomjs not found in path. phantomjs must be installed and in path.",
          call. = FALSE)
-  invisible(pjs)
+  invisible(as.character(pjs))
 }
 
 # Given a vector or list, drop all the NULL items in it
