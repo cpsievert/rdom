@@ -4,10 +4,12 @@
 \alias{rdom}
 \title{Return DOM of a website as HTML}
 \usage{
-rdom(url)
+rdom(url, timeout = 10)
 }
 \arguments{
 \item{url}{a URL of a website.}
+
+\item{timeout}{maximum time to wait for page to load and render, in seconds}
 }
 \description{
 Return DOM of a website as HTML

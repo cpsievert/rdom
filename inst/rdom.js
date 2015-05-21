@@ -3,6 +3,7 @@ var page = require('webpage').create();
 // TODO: provide a check for argument usage
 var args = require('system').args;
 var url = args[1];
+var timeout = args[2];
 
 page.open(url, function (status) {
   if (status !== 'success') {
@@ -17,7 +18,7 @@ page.open(url, function (status) {
       });
       console.log(doc);
       phantom.exit();
-    }, 10000);
+    }, timeout);
   }
 });
 

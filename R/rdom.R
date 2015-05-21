@@ -1,6 +1,7 @@
 #' Return DOM of a website as HTML
 #'
 #' @param url a URL of a website.
+#' @param timeout maximum time to wait for page to load and render, in seconds
 #' @export
 #' @examples
 #'
@@ -13,11 +14,12 @@
 #'   html_node(".table75") %>% html_table()
 #'
 
-rdom <- function(url) {
+rdom <- function(url, timeout=10) {
   if (missing(url)) stop("Please specify a url.")
   args <- list(
     paste0("'", system.file("rdom.js", package = "rdom"), "'"),
-    url
+    url,
+    timeout*1000
   )
   phantom_bin <- find_phantom()
   res <- system2(phantom_bin, args = as.character(args),
