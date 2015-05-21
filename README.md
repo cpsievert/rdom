@@ -72,7 +72,7 @@ library("rvest")
 ```
 
 ```r
-Hello Shiny!
+[1] "Hello Shiny!"
 ```
 
 This way it's fun and easy to test your shiny apps!
