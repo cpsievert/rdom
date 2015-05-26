@@ -4,23 +4,32 @@
 \alias{rdom}
 \title{Return DOM of a website as HTML}
 \usage{
-rdom(url, timeout = 10)
+rdom(url = NULL, css = NULL, all = FALSE, timeout = 30)
 }
 \arguments{
 \item{url}{a URL of a website.}
 
-\item{timeout}{maximum time to wait for page to load and render, in seconds}
+\item{css}{a string containing one or more CSS selectors separated by commas.}
+
+\item{all}{logical. This controls whether \code{querySelector} or
+\code{querySelectorAll} is used to extract elements from the page.
+When FALSE, output is similar to \code{rvest::html_node}. When TRUE,
+output is similar to \code{rvest::html_nodes}.
+If \code{css} is missing, then this argument is ignored.}
+
+\item{timeout}{maximum time to wait for page to load and render, in seconds.}
 }
 \description{
 Return DOM of a website as HTML
 }
 \examples{
 library("rvest")
+stars <- "http://www.techstars.com/companies/stats/"
 # doesn't work
-html("http://www.techstars.com/companies/stats/") \%>\%
-  html_node(".table75") \%>\% html_table()
+html(stars) \%>\% html_node(".table75") \%>\% html_table()
 # should work
-rdom("http://www.techstars.com/companies/stats/") \%>\%
-  html_node(".table75") \%>\% html_table()
+rdom(stars) \%>\% html_node(".table75") \%>\% html_table()
+# more efficient
+stars \%>\% rdom(".table75") \%>\% html_table()
 }
 

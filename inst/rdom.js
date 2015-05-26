@@ -2,23 +2,35 @@
 var page = require('webpage').create();
 // TODO: provide a check for argument usage
 var args = require('system').args;
-var url = args[1];
-var timeout = args[2];
+var selector = {"value": args[2], "all": args[3]};
 
-page.open(url, function (status) {
+page.open(args[1], function (status) {
   if (status !== 'success') {
     console.log("phantomjs couldn't open the page.");
     phantom.exit();
   } else {
-    // Get phantomjs 10 seconds to evaluate the page
     // http://stackoverflow.com/questions/28950627/settimeout-in-phantom-js
     setTimeout(function() {
-      var doc = page.evaluate(function () {
-        return document.documentElement.outerHTML;
-      });
-      console.log(doc);
+      // http://phantomjs.org/api/webpage/method/evaluate.html
+      var el = page.evaluate(function f(s) {
+        // if selector is invalid, return the entire document
+        if (s.value === undefined) {
+          return document.documentElement.outerHTML;
+        // default to querySelector (over querySelectorAll)
+        } else if (s.all === undefined || s.all == "false") {
+          return document.querySelector(s.value).outerHTML;
+        } else {
+          var nodeList = document.querySelectorAll(s.value);
+          var html = [];
+          for (var i = 0; i < nodeList.length; i++) {
+            html.push(nodeList[i].outerHTML);
+          }
+          return html
+        }
+      }, selector);
+      console.log(el);
       phantom.exit();
-    }, timeout);
+    }, args[4]);
   }
 });
 

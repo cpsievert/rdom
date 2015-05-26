@@ -1,10 +1,3 @@
-# Much of this file is copied/adapted from Winston Chang's work
-
-phantom_run <- function(args, wait = TRUE) {
-
-
-}
-
 # Try really hard to find bower in Windows
 find_phantom <- function() {
   # a slightly more robust finder of bower for windows

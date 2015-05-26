@@ -1,7 +1,7 @@
 rdom
 =====
 
-Access the DOM of a webpage as HTML with phantomjs.
+Easy access to the DOM of a webpage as HTML with phantomjs.
 
 ### Installation
 
@@ -17,9 +17,38 @@ stopifnot(Sys.which("phantomjs") != "")
 devtools::install_github("cpsievert/rdom")
 ```
 
-### Use cases
+### Motivation
+
+tl;dr - Swap out `rvest::html()` for `rdom::rdom()` when you need to scrape [dynamic web pages](http://en.wikipedia.org/wiki/Dynamic_web_page).
+
+[**rvest**](http://cran.r-project.org/web/packages/rvest/index.html) is awesome for scraping content from HTML pages, but it can only download the page source (which is _static_) and many websites nowadays are _dynamic_. Unfortunately, unless you [read the page source](http://www.computerhope.com/issues/ch000746.htm), you probably won't notice the difference until you run a strange error. Here's an example where that difference matters.
+
+For good reason, **rvest** has [a vignette on how to use it with SelectorGadget](http://cran.r-project.org/web/packages/rvest/vignettes/selectorgadget.html) to scrape content. Suppose I follow this guide in attempt to obtain the title 
+
+```r
+library(rvest)
+article <- "http://www.sciencedirect.com/science/article/pii/S2214999615005342"
+article %>% html() %>% html_node("#sec1")
+```
+
+```
+NULL
+```
+
+What? Why?
+
+```r
+library(rdom)
+article %>% rdom() %>% html_node("#sec1")
+```
+
+Here's an example of where this difference becomes important:
+
+
 
 #### Scraping dynamic pages
+
+Suppose you've found some information on a webpage that you'd like to extract.
 
 With **rdom** and [**rvest**](http://cran.r-project.org/web/packages/rvest/), accessing and extracting DOM elements is a breeze:
 
@@ -30,11 +59,24 @@ rdom("http://www.techstars.com/companies/stats/") %>%
    html_node(".table75") %>% html_table()
 ```
 
+
 ```r
     Status Number of Companies Percentage
 1   Active                 399     76.15%
 2 Acquired                  69     13.17%
 3   Failed                  58     11.07%
+```
+
+```{r}
+library("rvest")
+library("rdom")
+html("https://www.datatables.net/examples/data_sources/js_array.html") %>%
+  html_node("#example") %>% html_table()
+```
+
+```{r}
+rdom("https://www.datatables.net/examples/data_sources/js_array.html") %>%
+  html_node("#example") %>% html_table()
 ```
 
 
