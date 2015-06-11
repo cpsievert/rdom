@@ -2,7 +2,7 @@
 var page = require('webpage').create();
 // TODO: provide a check for argument usage
 var args = require('system').args;
-var selector = {"value": args[2], "all": args[3]};
+var selector = {"value": args[3], "all": args[4]};
 
 page.open(args[1], function (status) {
   if (status !== 'success') {
@@ -30,7 +30,7 @@ page.open(args[1], function (status) {
       }, selector);
       console.log(el);
       phantom.exit();
-    }, args[4]);
+    }, args[2]);
   }
 });
 

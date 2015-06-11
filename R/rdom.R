@@ -28,9 +28,9 @@ rdom <- function(url = NULL, css = NULL, all = FALSE, timeout = 30) {
   args <- dropNulls(list(
     shQuote(system.file("rdom.js", package = "rdom")),
     url,
+    timeout * 1000,
     css,
-    all,
-    timeout * 1000
+    all
   ))
   phantom_bin <- find_phantom()
   res <- system2(phantom_bin, args = as.character(args),
