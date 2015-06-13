@@ -23,7 +23,7 @@ Web scraping packages such as [__XML__](http://cran.r-project.org/web/packages/X
 
 To demonstrate the difference, suppose we want to extract the HTML table on [this page](http://bl.ocks.org/cpsievert/raw/2a9fb8f504cd56e9e8e3/):
 
-![](http://imgur.com/bsLODlC)
+<a href="http://imgur.com/bsLODlC"><img src="http://i.imgur.com/bsLODlC.png" /></a>
 
 `XML::htmlParse()` (and `rvest::read_html()`) returns the HTML page source, which is static, and doesn't contain the `<table>` element we desire (because JavaScript is modifying the state of the DOM):
 
