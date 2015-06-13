@@ -58,8 +58,8 @@ XML::htmlParse("http://bl.ocks.org/cpsievert/raw/2a9fb8f504cd56e9e8e3/")
 The main function in __rdom__, `rdom()`, uses phantomjs to render and return the DOM as an HTML string. Instead of passing the entire DOM as a string from phantomjs to R, you can give `rdom()` a CSS Selector to extract certain element(s).
 
 ```r
-rdom::rdom("http://bl.ocks.org/cpsievert/raw/2a9fb8f504cd56e9e8e3/", 
-           css = "table")
+tbl <- rdom::rdom("http://bl.ocks.org/cpsievert/raw/2a9fb8f504cd56e9e8e3/", css = "table")
+tbl
 ```
 
 ```html
@@ -82,6 +82,19 @@ rdom::rdom("http://bl.ocks.org/cpsievert/raw/2a9fb8f504cd56e9e8e3/",
     </tr>
   </tbody>
 </table> 
+```
+
+In this case, we can use `XML::readHTMLTable()` (or `rvest::html_table()`) to convert the `<table>` node into a data frame.
+
+```r
+XML::readHTMLTable(tbl)
+```
+
+```r
+    V1   V2   V3
+1 Cell Cell Cell
+2 Cell Cell Cell
+3 Cell Cell Cell
 ```
 
 ### Render shiny apps
