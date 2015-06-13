@@ -1,7 +1,7 @@
 rdom
 =====
 
-Easy access to the DOM of a webpage as HTML with phantomjs.
+Render and parse the DOM from R via phantomjs.
 
 ### Installation
 
@@ -17,85 +17,76 @@ stopifnot(Sys.which("phantomjs") != "")
 devtools::install_github("cpsievert/rdom")
 ```
 
-### Motivation
+### Introduction
 
-tl;dr - Swap out `rvest::html()` for `rdom::rdom()` when you need to scrape [dynamic web pages](http://en.wikipedia.org/wiki/Dynamic_web_page).
+Web scraping packages such as [__XML__](http://cran.r-project.org/web/packages/XML/index.html), [__xml2__](http://cran.r-project.org/web/packages/xml2/index.html) and [__rvest__](http://cran.r-project.org/web/packages/rvest/) allow you to download and _parse_ HTML files, but they lack a [browsing engine](https://en.wikipedia.org/wiki/Web_browser_engine) to fully render [the DOM](https://en.wikipedia.org/wiki/Document_Object_Model). 
 
-[**rvest**](http://cran.r-project.org/web/packages/rvest/index.html) is awesome for scraping content from HTML pages, but it can only download the page source (which is _static_) and many websites nowadays are _dynamic_. Unfortunately, unless you [read the page source](http://www.computerhope.com/issues/ch000746.htm), you probably won't notice the difference until you run a strange error. Here's an example where that difference matters.
+To demonstrate the difference, suppose we want to extract the HTML table on [this page](http://bl.ocks.org/cpsievert/raw/2a9fb8f504cd56e9e8e3/):
 
-For good reason, **rvest** has [a vignette on how to use it with SelectorGadget](http://cran.r-project.org/web/packages/rvest/vignettes/selectorgadget.html) to scrape content. Suppose I follow this guide in attempt to obtain the title 
+![](http://imgur.com/bsLODlC)
 
-```r
-library(rvest)
-article <- "http://www.sciencedirect.com/science/article/pii/S2214999615005342"
-article %>% html() %>% html_node("#sec1")
-```
-
-```
-NULL
-```
-
-What? Why?
+`XML::htmlParse()` (and `rvest::read_html()`) returns the HTML page source, which is static, and doesn't contain the `<table>` element we desire (because JavaScript is modifying the state of the DOM):
 
 ```r
-library(rdom)
-article %>% rdom() %>% html_node("#sec1")
+XML::htmlParse("http://bl.ocks.org/cpsievert/raw/2a9fb8f504cd56e9e8e3/")
 ```
 
-Here's an example of where this difference becomes important:
+```html
+<!DOCTYPE html>
+<html><body>
+    A Simple Table made with JavaScript
+    <p></p>
+    <script>
+      function tableCreate(){
+        var body = document.body,
+          tbl  = document.createElement('table');
 
+        for(var i = 0; i < 3; i++){
+          var tr = tbl.insertRow();
+          for(var j = 0; j < 3; j++){
+            var td = tr.insertCell();
+            td.appendChild(document.createTextNode("Cell"));
+          }
+        }
+        body.appendChild(tbl);
+      }
+      tableCreate();
+    </script>
+</body></html>
+```
 
-
-#### Scraping dynamic pages
-
-Suppose you've found some information on a webpage that you'd like to extract.
-
-With **rdom** and [**rvest**](http://cran.r-project.org/web/packages/rvest/), accessing and extracting DOM elements is a breeze:
+The main function in __rdom__, `rdom()`, uses phantomjs to render and return the DOM as an HTML string. Instead of passing the entire DOM as a string from phantomjs to R, you can give `rdom()` a CSS Selector to extract certain element(s).
 
 ```r
-library("rvest")
-library("rdom")
-rdom("http://www.techstars.com/companies/stats/") %>%
-   html_node(".table75") %>% html_table()
+rdom::rdom("http://bl.ocks.org/cpsievert/raw/2a9fb8f504cd56e9e8e3/", 
+           css = "table")
 ```
 
-
-```r
-    Status Number of Companies Percentage
-1   Active                 399     76.15%
-2 Acquired                  69     13.17%
-3   Failed                  58     11.07%
+```html
+<table>
+  <tbody>
+    <tr>
+      <td>Cell</td>
+      <td>Cell</td>
+      <td>Cell</td>
+    </tr>
+    <tr>
+      <td>Cell</td>
+      <td>Cell</td>
+      <td>Cell</td>
+    </tr>
+    <tr>
+      <td>Cell</td>
+      <td>Cell</td>
+      <td>Cell</td>
+    </tr>
+  </tbody>
+</table> 
 ```
 
-```{r}
-library("rvest")
-library("rdom")
-html("https://www.datatables.net/examples/data_sources/js_array.html") %>%
-  html_node("#example") %>% html_table()
-```
+### Render shiny apps
 
-```{r}
-rdom("https://www.datatables.net/examples/data_sources/js_array.html") %>%
-  html_node("#example") %>% html_table()
-```
-
-
-Note that, by itself, **rvest** can't obtain this table since it isn't hard coded in the page source (the table is populated via JavaScript).
-
-```r
-library("rvest")
-html("http://www.techstars.com/companies/stats/") %>%
-   html_node(".table75") %>% html_table()
-```
-
-```r
-Error in UseMethod("html_table") : 
-  no applicable method for 'html_table' applied to an object of class "NULL"
-```
-
-#### Test your shiny apps
-
-First, run your shiny app:
+An interesting use case for __rdom__ is for rendering (and testing) shiny apps.
 
 ```r
 library(shiny)
@@ -106,27 +97,44 @@ runExample("01_hello")
 Listening on http://127.0.0.1:4870
 ```
 
-Now, in another R session, pass the shiny URL to `rdom()` and it will return the DOM as HTML.
+Now, in another R session, pass this URL to `rdom()`. For this example, we'll just return the app's title.
 
 ```r
-library("rvest")
-(header <- rdom("http://127.0.0.1:4870") %>% html_node("h2") %>% html_text())
+header <- rdom::rdom("http://127.0.0.1:4870", "h2")
 ```
 
 ```r
-[1] "Hello Shiny!"
+<h2>Hello Shiny!</h2>
 ```
 
-This way it's fun and easy to test your shiny apps!
+This way it's easy to test your shiny apps!
 
 ```r
 library("testthat")
-expect_identical(header, "Hello Shiny!")
+expect_identical(XML::xmlValue(header), "Hello Shiny!")
 ```
 
-### TODO
 
-* An API for manipulating the DOM and injecting JS?
+### Using `rdom()` from the command line
+
+`rdom()` is essentially a wrapper around [phantomjs' command line interface](http://phantomjs.org/api/command-line.html). So, if you don't need R for your task, it might be more efficient to use the CLI. 
+
+```
+$ git clone https://github.com/cpsievert/rdom.git
+$ cd rdom
+$ phantomjs inst/rdom.js http://bl.ocks.org/cpsievert/raw/2a9fb8f504cd56e9e8e3 10000 table
+```
+
+There are 4 arguments that the `inst/rdom.js` script will respect:
+
+1. `url` a URL of a web page (required)
+2. `timeout` maximum time to wait for page to load and render, in milliseconds. (required)
+3. `css` a CSS selector (optional)
+4. `all` This controls whether querySelector or querySelectorAll is used to extract elements from the page. (optional)
+
+
+Everytime you call `rdom()`, it has to initiate a phantomjs process. Also, phantomjs has to open and fully render the site that you provide. If you need to render multiple sites, 
+
 
 ### Acknowledgements
 
