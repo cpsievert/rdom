@@ -21,7 +21,7 @@
 #' stars %>% rdom(".table75") %>% html_table()
 #'
 
-rdom <- function(url = NULL, css = NULL, all = FALSE, timeout = 30) {
+rdom <- function(url = NULL, css = NULL, all = FALSE, timeout = 5) {
   if (is.null(url)) stop("Please specify a url.")
   # If css is defined, convert R's TRUE/FALSE to true/false
   all <- if (is.null(css)) NULL else jsonlite::toJSON(all, auto_unbox = TRUE)
