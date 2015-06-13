@@ -115,7 +115,7 @@ expect_identical(XML::xmlValue(header), "Hello Shiny!")
 ```
 
 
-### Using `rdom()` from the command line
+### Using the CLI
 
 `rdom()` is essentially a wrapper around [phantomjs' command line interface](http://phantomjs.org/api/command-line.html). So, if you don't need R for your task, it might be more efficient to use the CLI. 
 
