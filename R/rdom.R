@@ -10,11 +10,11 @@
 #' @param timeout maximum time to wait for page to load and render, in seconds.
 #' @param filename A character string specifying a filename to store result
 #' @export
-#' @examples
 #' @importFrom XML htmlParse
 #' @importFrom XML xmlChildren
 #' @importFrom XML getNodeSet
 #'
+#' @examples \dontrun{
 #' library("rvest")
 #' stars <- "http://www.techstars.com/companies/stats/"
 #' # doesn't work
@@ -23,6 +23,7 @@
 #' rdom(stars) %>% html_node(".table75") %>% html_table()
 #' # more efficient
 #' stars %>% rdom(".table75") %>% html_table()
+#' }
 #'
 
 rdom <- function(url, css, all, timeout, filename) {

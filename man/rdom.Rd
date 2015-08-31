@@ -4,10 +4,10 @@
 \alias{rdom}
 \title{Return DOM of a website as HTML}
 \usage{
-rdom(url = NULL, css = NULL, all = FALSE, timeout = 30)
+rdom(url, css, all, timeout, filename)
 }
 \arguments{
-\item{url}{a URL of a website.}
+\item{url}{A url or a local path.}
 
 \item{css}{a string containing one or more CSS selectors separated by commas.}
 
@@ -18,11 +18,14 @@ output is similar to \code{rvest::html_nodes}.
 If \code{css} is missing, then this argument is ignored.}
 
 \item{timeout}{maximum time to wait for page to load and render, in seconds.}
+
+\item{filename}{A character string specifying a filename to store result}
 }
 \description{
 Return DOM of a website as HTML
 }
 \examples{
+\dontrun{
 library("rvest")
 stars <- "http://www.techstars.com/companies/stats/"
 # doesn't work
@@ -31,5 +34,6 @@ html(stars) \%>\% html_node(".table75") \%>\% html_table()
 rdom(stars) \%>\% html_node(".table75") \%>\% html_table()
 # more efficient
 stars \%>\% rdom(".table75") \%>\% html_table()
+}
 }
 
