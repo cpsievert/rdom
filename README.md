@@ -135,15 +135,17 @@ expect_identical(XML::xmlValue(header), "Hello Shiny!")
 ```
 $ git clone https://github.com/cpsievert/rdom.git
 $ cd rdom
-$ phantomjs inst/rdom.js http://bl.ocks.org/cpsievert/raw/2a9fb8f504cd56e9e8e3 10000 table
+$ phantomjs inst/rdomjs/rdom.js inst/jsTable/jsTable.html table false 1 table.html
+$ vi table.html
 ```
 
-There are 4 arguments that the `inst/rdom.js` script will respect:
+There are 4 arguments that the `rdom.js` script will respect:
 
-1. `url` a URL of a web page (required)
-2. `timeout` maximum time to wait for page to load and render, in milliseconds. (required)
-3. `css` a CSS selector (optional)
-4. `all` This controls whether querySelector or querySelectorAll is used to extract elements from the page. (optional)
+1. `url` a URL of a web page (required).
+2. `css` a CSS selector.
+3. `all` This controls whether querySelector or querySelectorAll is used to extract elements from the page.
+4. `timeout` maximum time to wait for page to load and render, in seconds.
+5. `filename` Write HTML string to a file.
 
 
 Everytime you call `rdom()`, it has to initiate a phantomjs process. Also, phantomjs has to open and fully render the site that you provide. If you need to render multiple sites, 

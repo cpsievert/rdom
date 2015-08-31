@@ -1,3 +1,14 @@
+  rdom VERSION 0.0.3
+
+NEW FEATURES
+
+  - New filename argument added to rdom. This allows one to write the HTML string to a file.
+
+IMPROVEMENTS
+
+  - Better error handling
+  - Added some basic unit tests
+
     rdom VERSION 0.0.2
 
 NEW FEATURES
