@@ -35,7 +35,7 @@ rdom <- function(url, css, all, timeout, filename) {
     css %||% NA,
     all %||% FALSE,
     timeout %||% 5,
-    filename %||% NA
+    filename %pe% NA
   )
   args <- lapply(args, jsonlite::toJSON, auto_unbox = TRUE)
   phantom_bin <- find_phantom()

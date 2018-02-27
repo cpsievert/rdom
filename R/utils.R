@@ -14,3 +14,7 @@ find_phantom <- function() {
 "%||%" <- function(x, y = NULL) {
   if (missing(x)) y else x
 }
+
+"%pe%" <- function(x, y = "") {
+  if (missing(x)) y else path.expand(x)
+}
