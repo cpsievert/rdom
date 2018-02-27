@@ -1,4 +1,10 @@
-  rdom VERSION 0.0.3
+  rdom VERSION 0.0.3.9000
+
+BUG FIXES
+
+  - Path expansion is now performed on filename argument (see #12)
+
+rdom VERSION 0.0.3
 
 NEW FEATURES
 
