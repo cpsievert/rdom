@@ -10,9 +10,8 @@
 #' @param timeout maximum time to wait for page to load and render, in seconds.
 #' @param filename A character string specifying a filename to store result
 #' @export
-#' @importFrom XML htmlParse
-#' @importFrom XML xmlChildren
-#' @importFrom XML getNodeSet
+#' @importFrom xml2 read_xml
+#' @importFrom xml2 xml_add_child
 #'
 #' @examples \dontrun{
 #' library("rvest")
@@ -51,14 +50,14 @@ rdom <- function(url, css, all, timeout, filename) {
   st <- attr(res, 'status')
   if (!is.null(st)) stop(paste(res, '\n'))
   p <- if (missing(filename)) {
-    XML::htmlParse(res, asText = TRUE)
+    xml2::read_xml(res, asText = TRUE)
   } else {
-    XML::htmlParse(filename)
+    xml2::read_xml(filename)
   }
   # If the result is a node or node list, htmlParse() inserts them into
   # the body of a bare-bones HTML page.
   if (!missing(css)) {
-    nodes <- XML::xmlChildren(XML::getNodeSet(p, '//body')[[1]])
+    nodes <- xml2::xml_add_child(p, '//body')[[1]]
     if (length(nodes) == 1) nodes[[1]] else nodes
   } else {
     p

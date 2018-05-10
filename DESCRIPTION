@@ -6,7 +6,7 @@ Authors@R: c(
   person("Winston", "Chang", role = "cph", email = "winston@rstudio.com"))
 Description: Access the DOM of a webpage as HTML using phantomjs.
 Imports:
-  XML,
+  xml2,
   jsonlite
 Suggests:
   rvest,
