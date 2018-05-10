@@ -27,6 +27,7 @@
 
 rdom <- function(url, css, all, timeout, filename) {
   if (missing(url)) stop('Please specify a url.')
+  temp <- tempfile(fileext = ".html")
   args <- list(
     system.file('rdomjs/rdom.js', package = 'rdom'),
     url,
@@ -34,26 +35,15 @@ rdom <- function(url, css, all, timeout, filename) {
     css %||% NA,
     all %||% FALSE,
     timeout %||% 5,
-    filename %pe% NA
+    filename %pe% temp
   )
   args <- lapply(args, jsonlite::toJSON, auto_unbox = TRUE)
   phantom_bin <- find_phantom()
-  res <- if (missing(filename)) {
-    # capture output as a character vector
-    system2(phantom_bin, args = as.character(args),
-            stdout = TRUE, stderr = TRUE, wait = TRUE)
-  } else {
-    # ignore stdout/stderr and write to file
-    system2(phantom_bin, args = as.character(args),
-            stdout = FALSE, stderr = FALSE, wait = TRUE)
-  }
+  res <- system2(phantom_bin, args = as.character(args),
+                 stdout = FALSE, stderr = FALSE, wait = TRUE)
   st <- attr(res, 'status')
   if (!is.null(st)) stop(paste(res, '\n'))
-  p <- if (missing(filename)) {
-    xml2::read_xml(res, asText = TRUE)
-  } else {
-    xml2::read_xml(filename)
-  }
+  p <- xml2::read_xml(filename)
   # If the result is a node or node list, htmlParse() inserts them into
   # the body of a bare-bones HTML page.
   if (!missing(css)) {
