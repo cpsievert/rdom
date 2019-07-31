@@ -1,6 +1,6 @@
 Package: rdom
 Title: Access the DOM of a webpage as HTML using phantomjs
-Version: 0.0.3.9000
+Version: 0.0.3.9001
 Authors@R: c(
   person("Carson", "Sievert", role = c("aut", "cre"), email = "cpsievert1@gmail.com"),
   person("Winston", "Chang", role = "cph", email = "winston@rstudio.com"))
@@ -15,4 +15,4 @@ Suggests:
 License: GPL-2
 SystemRequirements: phantomjs - http://phantomjs.org/
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

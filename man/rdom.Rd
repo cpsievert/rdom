@@ -26,12 +26,19 @@ Return DOM of a website as HTML
 }
 \examples{
 \dontrun{
+filename = tempfile(tmpdir = "~", fileext = ".html") # added space
+rdom("https://en.wikipedia.org/wiki/Main_Page", filename = filename)
+rdom(filename)
+unlink(filename)
+
 library("rvest")
 stars <- "http://www.techstars.com/companies/stats/"
 # doesn't work
 html(stars) \%>\% html_node(".table75") \%>\% html_table()
 # should work
-rdom(stars) \%>\% html_node(".table75") \%>\% html_table()
+rdom(stars) \%>\%
+html_node(".table75") \%>\%
+html_table()
 # more efficient
 stars \%>\% rdom(".table75") \%>\% html_table()
 }
