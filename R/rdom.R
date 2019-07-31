@@ -15,12 +15,19 @@
 #' @importFrom XML getNodeSet
 #'
 #' @examples \dontrun{
+#' filename = tempfile(tmpdir = "~", fileext = ".html") # added space
+#' rdom("https://en.wikipedia.org/wiki/Main_Page", filename = filename)
+#' rdom(filename)
+#' unlink(filename)
+#'
 #' library("rvest")
 #' stars <- "http://www.techstars.com/companies/stats/"
 #' # doesn't work
 #' html(stars) %>% html_node(".table75") %>% html_table()
 #' # should work
-#' rdom(stars) %>% html_node(".table75") %>% html_table()
+#' rdom(stars) %>%
+#' html_node(".table75") %>%
+#' html_table()
 #' # more efficient
 #' stars %>% rdom(".table75") %>% html_table()
 #' }
@@ -28,6 +35,12 @@
 
 rdom <- function(url, css, all, timeout, filename) {
   if (missing(url)) stop('Please specify a url.')
+  if (file.exists(url)) {
+    url = normalizePath(url)
+  }
+  if (!missing(filename)) {
+    filename = path.expand(filename)
+  }
   args <- list(
     system.file('rdomjs/rdom.js', package = 'rdom'),
     url,

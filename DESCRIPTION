@@ -15,4 +15,4 @@ Suggests:
 License: GPL-2
 SystemRequirements: phantomjs - http://phantomjs.org/
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
